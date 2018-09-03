@@ -9,31 +9,30 @@
 import UIKit
 import Speech
 
-protocol STTServiceDelegate {
+protocol STTServiceDelegate: class {
     func speechToTextResult(content:String,isFinal:Bool);
     func speechToTextError(error:Error?);
+    func availabilityDidChange(avalible:Bool);
 }
 
 class STTService: NSObject,SFSpeechRecognizerDelegate {
     
     static let shareInstance = STTService()
     private var speechRecognizer:SFSpeechRecognizer!
-    
-    var delegate:STTServiceDelegate?
-    
+    weak var delegate:STTServiceDelegate?
+    var isEnable = false
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
     private var audioEngine:AVAudioEngine?
-    private var locale:Locale? {
+    
+    var locale:Locale? {
         willSet(newValue){
             speechRecognizer = SFSpeechRecognizer(locale: newValue!)
         }
     }
     
-    
-    var isEnable = false
-    
     private override init() {
+        
         super.init()
         locale = Locale(identifier: "en-US") // use en default
         speechRecognizer = SFSpeechRecognizer(locale: locale!)
@@ -43,20 +42,34 @@ class STTService: NSObject,SFSpeechRecognizerDelegate {
         
         speechRecognizer.delegate = self
         
+        
         SFSpeechRecognizer.requestAuthorization { (authStatus) in
             self.isEnable = authStatus == .authorized
+            
+            if self.delegate != nil {
+                self.delegate?.availabilityDidChange(avalible: self.isEnable)
+            }
+            
         }
     }
     
+    func isRunning() -> Bool {
+        return (audioEngine?.isRunning)!
+    }
     
     func startSpeaking() {
         
-        if recognitionTask != nil {  //1
+        if recognitionTask != nil {
             recognitionTask?.cancel()
             recognitionTask = nil
         }
         
-        let audioSession = AVAudioSession.sharedInstance()  //2
+        if recognitionRequest == nil {
+            recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
+            recognitionRequest?.shouldReportPartialResults = true
+        }
+        
+        let audioSession = AVAudioSession.sharedInstance()
         do {
             try audioSession.setCategory(AVAudioSessionCategoryRecord)
             try audioSession.setMode(AVAudioSessionModeMeasurement)
@@ -64,8 +77,6 @@ class STTService: NSObject,SFSpeechRecognizerDelegate {
         } catch {
             print("audioSession properties weren't set because of an error.")
         }
-        
-        
         
         guard let inputNode = audioEngine?.inputNode else {
             fatalError("Audio engine has no input node")
@@ -76,9 +87,9 @@ class STTService: NSObject,SFSpeechRecognizerDelegate {
         }
         
         
-        recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest, resultHandler: { (result, error) in  //7
+        self.recognitionTask = self.speechRecognizer.recognitionTask(with: recognitionRequest, resultHandler: {[unowned self] (result, error) in
             
-            var isFinal = false  //8
+            var isFinal = false
             
             if result != nil {
                 
@@ -95,7 +106,7 @@ class STTService: NSObject,SFSpeechRecognizerDelegate {
                 self.recognitionRequest = nil
                 self.recognitionTask = nil
                 
-                if self.delegate != nil {
+                if self.delegate != nil && error != nil {
                     self.delegate?.speechToTextError(error: error)
                 }
             }
@@ -123,5 +134,12 @@ class STTService: NSObject,SFSpeechRecognizerDelegate {
 
     func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer, availabilityDidChange available: Bool) {
         isEnable = available
+        if delegate != nil {
+            delegate?.availabilityDidChange(avalible: available)
+        }
+    }
+    
+    deinit {
+        print("STTService deinit")
     }
 }

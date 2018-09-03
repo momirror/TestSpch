@@ -48,6 +48,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <navigationItem key="navigationItem" id="6gS-tp-F3Y"/>
                     <connections>
                         <outlet property="btnSpeech" destination="vfr-QX-iqL" id="kMc-X2-hTo"/>
                         <outlet property="textview" destination="joG-nC-436" id="WpU-1A-mMb"/>
