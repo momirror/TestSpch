@@ -13,6 +13,7 @@
 		C1E9E4FB213CD6CE00066090 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1E9E4FA213CD6CE00066090 /* Assets.xcassets */; };
 		C1E9E4FE213CD6CE00066090 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C1E9E4FC213CD6CE00066090 /* LaunchScreen.storyboard */; };
 		C1E9E509213CD6CE00066090 /* SpeechDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E9E508213CD6CE00066090 /* SpeechDemoTests.swift */; };
+		C1E9E514213CD6E400066090 /* STTService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E9E513213CD6E400066090 /* STTService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,7 @@
 		C1E9E504213CD6CE00066090 /* SpeechDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpeechDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1E9E508213CD6CE00066090 /* SpeechDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechDemoTests.swift; sourceTree = "<group>"; };
 		C1E9E50A213CD6CE00066090 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C1E9E513213CD6E400066090 /* STTService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +85,7 @@
 				C1E9E4FA213CD6CE00066090 /* Assets.xcassets */,
 				C1E9E4FC213CD6CE00066090 /* LaunchScreen.storyboard */,
 				C1E9E4FF213CD6CE00066090 /* Info.plist */,
+				C1E9E513213CD6E400066090 /* STTService.swift */,
 			);
 			path = SpeechDemo;
 			sourceTree = "<group>";
@@ -197,6 +200,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1E9E514213CD6E400066090 /* STTService.swift in Sources */,
 				C1E9E4F6213CD6CD00066090 /* ViewController.swift in Sources */,
 				C1E9E4F4213CD6CD00066090 /* AppDelegate.swift in Sources */,
 			);
